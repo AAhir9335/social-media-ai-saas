@@ -1,0 +1,260 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Schedulix • Scheduled Posts</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.6.0/css/all.min.css">
+    
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=Space+Grotesk:wght@500;600&display=swap');
+        
+        .tail-container {
+            font-family: 'Inter', system_ui, sans-serif;
+        }
+        .logo-font {
+            font-family: 'Space Grotesk', sans-serif;
+        }
+        
+        .post-card {
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+        .post-card:hover {
+            transform: translateY(-4px);
+            box-shadow: 0 20px 25px -5px rgb(0 0 0 / 0.1), 0 8px 10px -6px rgb(0 0 0 / 0.1);
+        }
+    </style>
+</head>
+<body class="tail-container bg-zinc-950 text-zinc-200 min-h-screen">
+
+<div class="flex h-screen overflow-hidden">
+    
+    <!-- Sidebar -->
+    <div id="sidebar" class="w-72 bg-zinc-900 border-r border-zinc-800 flex flex-col -translate-x-full lg:translate-x-0 transition-all duration-300">
+        <div class="px-8 py-6 border-b border-zinc-800 flex items-center gap-3">
+            <div class="w-10 h-10 bg-violet-600 rounded-2xl flex items-center justify-center">
+                <i class="fa-solid fa-calendar-days text-white text-2xl"></i>
+            </div>
+            <span class="logo-font text-3xl font-semibold tracking-tighter text-white">schedulix</span>
+        </div>
+        
+        <div class="flex-1 px-4 py-8 overflow-y-auto">
+            <nav class="space-y-1">
+                <a href="dashboard.html" class="flex items-center gap-3 px-6 py-3.5 text-zinc-400 hover:bg-zinc-800/50 hover:text-zinc-200 rounded-2xl">
+                    <i class="fa-solid fa-house w-5"></i><span>Dashboard</span>
+                </a>
+                <a href="create-post.html" class="flex items-center gap-3 px-6 py-3.5 text-zinc-400 hover:bg-zinc-800/50 hover:text-zinc-200 rounded-2xl">
+                    <i class="fa-solid fa-plus w-5"></i><span>Create Post</span>
+                </a>
+                <a href="#" class="flex items-center gap-3 px-6 py-3.5 text-white bg-zinc-800 rounded-2xl font-medium">
+                    <i class="fa-solid fa-clock w-5"></i><span>Scheduled Posts</span>
+                </a>
+                <a href="#" class="flex items-center gap-3 px-6 py-3.5 text-zinc-400 hover:bg-zinc-800/50 hover:text-zinc-200 rounded-2xl">
+                    <i class="fa-solid fa-chart-line w-5"></i><span>Analytics</span>
+                </a>
+                <a href="#" class="flex items-center gap-3 px-6 py-3.5 text-zinc-400 hover:bg-zinc-800/50 hover:text-zinc-200 rounded-2xl">
+                    <i class="fa-solid fa-cog w-5"></i><span>Settings</span>
+                </a>
+            </nav>
+        </div>
+    </div>
+
+    <!-- Main Content -->
+    <div class="flex-1 flex flex-col overflow-hidden">
+        
+        <!-- Top Bar -->
+        <header class="h-16 bg-zinc-900 border-b border-zinc-800 px-6 lg:px-8 flex items-center justify-between">
+            <div class="flex items-center gap-4">
+                <button onclick="toggleSidebar()" class="lg:hidden text-2xl text-zinc-400 hover:text-white">
+                    <i class="fa-solid fa-bars"></i>
+                </button>
+                <h1 class="text-2xl font-semibold text-white">Scheduled Posts</h1>
+            </div>
+            
+            <div class="flex items-center gap-4">
+                <div class="relative w-80">
+                    <input id="search-input" 
+                           onkeyup="filterPosts()"
+                           type="text" 
+                           placeholder="Search captions..." 
+                           class="w-full bg-zinc-800 border border-zinc-700 rounded-2xl py-3 pl-11 pr-6 text-sm focus:outline-none focus:border-violet-500">
+                    <i class="fa-solid fa-magnifying-glass absolute left-4 top-1/2 -translate-y-1/2 text-zinc-500"></i>
+                </div>
+            </div>
+        </header>
+
+        <div class="flex-1 overflow-auto p-6 lg:p-8 bg-zinc-950">
+            <div class="max-w-7xl mx-auto">
+                
+                <!-- Filters -->
+                <div class="flex flex-wrap items-center gap-4 mb-8">
+                    <div class="text-sm font-medium text-zinc-400 px-2">Filter by platform:</div>
+                    <div onclick="toggleFilter(this)" data-platform="all" 
+                         class="filter-btn active px-5 py-2 bg-zinc-800 hover:bg-zinc-700 rounded-2xl text-sm cursor-pointer">All</div>
+                    <div onclick="toggleFilter(this)" data-platform="instagram" 
+                         class="filter-btn px-5 py-2 bg-zinc-800 hover:bg-zinc-700 rounded-2xl text-sm cursor-pointer flex items-center gap-2">
+                        <i class="fa-brands fa-instagram text-pink-500"></i> Instagram
+                    </div>
+                    <div onclick="toggleFilter(this)" data-platform="facebook" 
+                         class="filter-btn px-5 py-2 bg-zinc-800 hover:bg-zinc-700 rounded-2xl text-sm cursor-pointer flex items-center gap-2">
+                        <i class="fa-brands fa-facebook text-blue-600"></i> Facebook
+                    </div>
+                    <div onclick="toggleFilter(this)" data-platform="twitter" 
+                         class="filter-btn px-5 py-2 bg-zinc-800 hover:bg-zinc-700 rounded-2xl text-sm cursor-pointer flex items-center gap-2">
+                        <i class="fa-brands fa-x-twitter"></i> X
+                    </div>
+                    <div onclick="toggleFilter(this)" data-platform="linkedin" 
+                         class="filter-btn px-5 py-2 bg-zinc-800 hover:bg-zinc-700 rounded-2xl text-sm cursor-pointer flex items-center gap-2">
+                        <i class="fa-brands fa-linkedin text-blue-700"></i> LinkedIn
+                    </div>
+                </div>
+
+                <!-- Posts Grid -->
+                <div id="posts-container" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                    <!-- Populated by JavaScript -->
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+    // Suppress Tailwind CDN warning
+    window.tailwindConfig = { content: [] };
+
+    const scheduledPosts = [
+        {
+            id: 1,
+            caption: "Just dropped our biggest product update yet! 🚀 What do you think?",
+            platforms: ["instagram", "facebook"],
+            datetime: "April 12, 2026 • 10:00 AM",
+            image: "https://picsum.photos/id/1015/600/400",
+            status: "scheduled"
+        },
+        {
+            id: 2,
+            caption: "Weekly creator tips: How to grow your audience in 2026",
+            platforms: ["twitter", "linkedin"],
+            datetime: "April 13, 2026 • 9:30 AM",
+            image: "https://picsum.photos/id/201/600/400",
+            status: "scheduled"
+        },
+        {
+            id: 3,
+            caption: "Behind the scenes at our new office ✨",
+            platforms: ["instagram"],
+            datetime: "April 14, 2026 • 3:00 PM",
+            image: "https://picsum.photos/id/251/600/400",
+            status: "scheduled"
+        },
+        {
+            id: 4,
+            caption: "New blog post is live! Link in bio 👇",
+            platforms: ["facebook", "linkedin"],
+            datetime: "April 15, 2026 • 11:00 AM",
+            image: null,
+            status: "scheduled"
+        }
+    ];
+
+    function renderPosts(posts) {
+        const container = document.getElementById('posts-container');
+        container.innerHTML = '';
+
+        posts.forEach(post => {
+            const card = document.createElement('div');
+            card.className = `post-card bg-zinc-900 border border-zinc-800 rounded-3xl overflow-hidden`;
+            
+            let platformsHTML = post.platforms.map(p => {
+                if (p === 'instagram') return `<i class="fa-brands fa-instagram text-pink-500 text-xl"></i>`;
+                if (p === 'facebook') return `<i class="fa-brands fa-facebook text-blue-600 text-xl"></i>`;
+                if (p === 'twitter') return `<i class="fa-brands fa-x-twitter text-xl"></i>`;
+                if (p === 'linkedin') return `<i class="fa-brands fa-linkedin text-blue-700 text-xl"></i>`;
+            }).join('');
+            
+            card.innerHTML = `
+                ${post.image ? `
+                <img src="${post.image}" class="w-full h-48 object-cover" alt="Post media">
+                ` : `
+                <div class="w-full h-48 bg-zinc-800 flex items-center justify-center">
+                    <i class="fa-solid fa-image text-4xl text-zinc-600"></i>
+                </div>
+                `}
+                
+                <div class="p-6">
+                    <div class="flex justify-between items-start mb-4">
+                        <div class="flex gap-3">
+                            ${platformsHTML}
+                        </div>
+                        <span class="text-xs px-3 py-1 bg-emerald-500/10 text-emerald-400 rounded-2xl">Scheduled</span>
+                    </div>
+                    
+                    <p class="line-clamp-3 text-zinc-300 text-[15px] leading-relaxed mb-6">
+                        ${post.caption}
+                    </p>
+                    
+                    <div class="text-xs text-zinc-400 mb-5">${post.datetime}</div>
+                    
+                    <div class="flex gap-3">
+                        <button onclick="editPost(${post.id})" 
+                                class="flex-1 py-3 border border-zinc-700 hover:border-violet-500 rounded-2xl text-sm font-medium transition-colors">
+                            Edit
+                        </button>
+                        <button onclick="deletePost(${post.id})" 
+                                class="flex-1 py-3 border border-zinc-700 hover:border-red-500 text-red-400 hover:text-red-500 rounded-2xl text-sm font-medium transition-colors">
+                            Delete
+                        </button>
+                    </div>
+                </div>
+            `;
+            container.appendChild(card);
+        });
+    }
+
+    function filterPosts() {
+        const searchTerm = document.getElementById('search-input').value.toLowerCase().trim();
+        let filtered = scheduledPosts;
+        
+        if (searchTerm) {
+            filtered = filtered.filter(post => 
+                post.caption.toLowerCase().includes(searchTerm)
+            );
+        }
+        
+        renderPosts(filtered);
+    }
+
+    function toggleFilter(el) {
+        document.querySelectorAll('.filter-btn').forEach(btn => btn.classList.remove('active', 'bg-violet-600', 'text-white'));
+        el.classList.add('active', 'bg-violet-600', 'text-white');
+        
+        // In a real app, you would filter by platform here
+        // For demo, we just re-render all
+        filterPosts();
+    }
+
+    function editPost(id) {
+        alert(`✏️ Opening editor for post #${id}\n\n(This would open the create post page with pre-filled data in production)`);
+    }
+
+    function deletePost(id) {
+        if (confirm("Delete this scheduled post?")) {
+            alert(`🗑️ Post #${id} deleted successfully!`);
+            // Refresh list (demo)
+            renderPosts(scheduledPosts);
+        }
+    }
+
+    function toggleSidebar() {
+        document.getElementById('sidebar').classList.toggle('-translate-x-full');
+    }
+
+    // Initialize
+    window.onload = function() {
+        renderPosts(scheduledPosts);
+        console.log('%cSchedulix Scheduled Posts page ready ✨', 'color:#a5b4fc; font-weight:600');
+    };
+</script>
+</body>
+</html>
