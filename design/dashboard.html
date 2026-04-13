@@ -1,0 +1,317 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Schedulix • Dashboard</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.6.0/css/all.min.css">
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&amp;family=Space+Grotesk:wght@500;600&amp;display=swap');
+        
+        .tail-container {
+            font-family: 'Inter', system_ui, sans-serif;
+        }
+        .logo-font {
+            font-family: 'Space Grotesk', sans-serif;
+        }
+        
+        .sidebar-link {
+            transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+        .sidebar-link:hover {
+            transform: translateX(4px);
+        }
+        .stat-card {
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+        .stat-card:hover {
+            transform: translateY(-6px);
+            box-shadow: 0 20px 25px -5px rgb(0 0 0 / 0.1), 0 8px 10px -6px rgb(0 0 0 / 0.1);
+        }
+    </style>
+</head>
+<body class="tail-container bg-zinc-950 text-zinc-200 min-h-screen">
+
+    <div class="flex h-screen overflow-hidden">
+        
+        <!-- Sidebar -->
+        <div id="sidebar" class="w-72 bg-zinc-900 border-r border-zinc-800 flex flex-col transition-all duration-300 lg:translate-x-0">
+            
+            <!-- Logo -->
+            <div class="px-8 py-6 border-b border-zinc-800 flex items-center gap-3">
+                <div class="w-10 h-10 bg-violet-600 rounded-2xl flex items-center justify-center">
+                    <i class="fa-solid fa-calendar-days text-white text-2xl"></i>
+                </div>
+                <span class="logo-font text-3xl font-semibold tracking-tighter text-white">schedulix</span>
+            </div>
+
+            <!-- Menu -->
+            <div class="flex-1 px-4 py-8 overflow-y-auto">
+                <nav class="space-y-1">
+                    <a href="#" class="sidebar-link flex items-center gap-3 px-6 py-3.5 text-white bg-zinc-800 rounded-2xl font-medium">
+                        <i class="fa-solid fa-house w-5"></i>
+                        <span>Dashboard</span>
+                    </a>
+                    <a href="#" class="sidebar-link flex items-center gap-3 px-6 py-3.5 text-zinc-400 hover:bg-zinc-800/50 hover:text-zinc-200 rounded-2xl font-medium">
+                        <i class="fa-solid fa-plus w-5"></i>
+                        <span>Create Post</span>
+                    </a>
+                    <a href="#" class="sidebar-link flex items-center gap-3 px-6 py-3.5 text-zinc-400 hover:bg-zinc-800/50 hover:text-zinc-200 rounded-2xl font-medium">
+                        <i class="fa-solid fa-clock w-5"></i>
+                        <span>Scheduled Posts</span>
+                    </a>
+                    <a href="#" class="sidebar-link flex items-center gap-3 px-6 py-3.5 text-zinc-400 hover:bg-zinc-800/50 hover:text-zinc-200 rounded-2xl font-medium">
+                        <i class="fa-solid fa-chart-line w-5"></i>
+                        <span>Analytics</span>
+                    </a>
+                    <a href="#" class="sidebar-link flex items-center gap-3 px-6 py-3.5 text-zinc-400 hover:bg-zinc-800/50 hover:text-zinc-200 rounded-2xl font-medium">
+                        <i class="fa-solid fa-cog w-5"></i>
+                        <span>Settings</span>
+                    </a>
+                </nav>
+
+                <div class="mt-12 px-6">
+                    <div class="text-xs font-medium text-zinc-500 mb-4 tracking-widest">CONNECTED ACCOUNTS</div>
+                    <div class="space-y-4">
+                        <div class="flex items-center gap-3 bg-zinc-800/50 rounded-2xl p-3">
+                            <i class="fa-brands fa-instagram text-pink-500 text-2xl"></i>
+                            <div class="text-sm">instagram • @alexrivera</div>
+                        </div>
+                        <div class="flex items-center gap-3 bg-zinc-800/50 rounded-2xl p-3">
+                            <i class="fa-brands fa-linkedin text-blue-600 text-2xl"></i>
+                            <div class="text-sm">linkedin • Alex Rivera</div>
+                        </div>
+                        <div class="flex items-center gap-3 bg-zinc-800/50 rounded-2xl p-3">
+                            <i class="fa-brands fa-x-twitter text-white text-2xl"></i>
+                            <div class="text-sm">twitter • @arivera</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Bottom User -->
+            <div class="p-6 border-t border-zinc-800">
+                <div class="flex items-center gap-3">
+                    <div class="w-9 h-9 bg-zinc-700 rounded-2xl overflow-hidden">
+                        <img src="https://picsum.photos/id/64/128/128" alt="Profile" class="w-full h-full object-cover">
+                    </div>
+                    <div class="flex-1">
+                        <div class="font-medium text-sm">Alex Rivera</div>
+                        <div class="text-zinc-500 text-xs">Creator Plan</div>
+                    </div>
+                    <button onclick="logout()" class="text-zinc-400 hover:text-white">
+                        <i class="fa-solid fa-arrow-right-from-bracket"></i>
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Main Content -->
+        <div class="flex-1 flex flex-col overflow-hidden">
+            
+            <!-- Top Bar -->
+            <header class="h-16 bg-zinc-900 border-b border-zinc-800 px-8 flex items-center justify-between">
+                <div class="flex items-center gap-4">
+                    <button onclick="toggleSidebar()" class="lg:hidden text-2xl text-zinc-400 hover:text-white">
+                        <i class="fa-solid fa-bars"></i>
+                    </button>
+                    <div class="relative">
+                        <input type="text" placeholder="Search posts or accounts..." 
+                               class="bg-zinc-800 border border-zinc-700 rounded-2xl py-3 pl-11 pr-6 w-80 focus:outline-none focus:border-violet-500 text-sm">
+                        <i class="fa-solid fa-magnifying-glass absolute left-4 top-1/2 -translate-y-1/2 text-zinc-500"></i>
+                    </div>
+                </div>
+
+                <div class="flex items-center gap-6">
+                    <button class="relative text-2xl text-zinc-400 hover:text-white transition-colors">
+                        <i class="fa-solid fa-bell"></i>
+                        <span class="absolute -top-1 -right-1 w-5 h-5 bg-red-500 text-white text-[10px] rounded-full flex items-center justify-center">3</span>
+                    </button>
+                    
+                    <div class="flex items-center gap-3">
+                        <div class="text-right">
+                            <div class="text-sm font-medium">Alex Rivera</div>
+                            <div class="text-emerald-400 text-xs">Online</div>
+                        </div>
+                        <div class="w-9 h-9 bg-zinc-700 rounded-2xl overflow-hidden border border-zinc-600">
+                            <img src="https://picsum.photos/id/64/128/128" alt="Profile" class="w-full h-full object-cover">
+                        </div>
+                    </div>
+                </div>
+            </header>
+
+            <!-- Dashboard Content -->
+            <div class="flex-1 overflow-auto p-8 bg-zinc-950">
+                <div class="max-w-7xl mx-auto">
+                    
+                    <!-- Welcome -->
+                    <div class="flex justify-between items-end mb-8">
+                        <div>
+                            <h1 class="text-4xl font-semibold text-white">Good afternoon, Alex 👋</h1>
+                            <p class="text-zinc-400 mt-1">Here's what's happening with your socials today</p>
+                        </div>
+                        <button onclick="quickCreate()" 
+                            class="flex items-center gap-3 bg-violet-600 hover:bg-violet-700 transition-colors text-white px-8 py-4 rounded-2xl font-semibold">
+                            <i class="fa-solid fa-plus"></i>
+                            <span>Quick Create Post</span>
+                        </button>
+                    </div>
+
+                    <!-- Stats -->
+                    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 mb-12">
+                        <div class="stat-card bg-zinc-900 border border-zinc-800 rounded-3xl p-8">
+                            <div class="flex justify-between">
+                                <div>
+                                    <div class="text-emerald-400 text-sm font-medium">TOTAL POSTS</div>
+                                    <div class="text-5xl font-semibold text-white mt-3">248</div>
+                                </div>
+                                <i class="fa-solid fa-chart-simple text-5xl text-emerald-500/30"></i>
+                            </div>
+                            <div class="text-emerald-400 text-sm mt-6 flex items-center gap-1">
+                                <i class="fa-solid fa-arrow-trend-up"></i>
+                                <span>+18 this month</span>
+                            </div>
+                        </div>
+                        
+                        <div class="stat-card bg-zinc-900 border border-zinc-800 rounded-3xl p-8">
+                            <div class="flex justify-between">
+                                <div>
+                                    <div class="text-amber-400 text-sm font-medium">SCHEDULED</div>
+                                    <div class="text-5xl font-semibold text-white mt-3">12</div>
+                                </div>
+                                <i class="fa-solid fa-clock text-5xl text-amber-500/30"></i>
+                            </div>
+                            <div class="text-amber-400 text-sm mt-6 flex items-center gap-1">
+                                <span>Next post in 4 hours</span>
+                            </div>
+                        </div>
+                        
+                        <div class="stat-card bg-zinc-900 border border-zinc-800 rounded-3xl p-8">
+                            <div class="flex justify-between">
+                                <div>
+                                    <div class="text-sky-400 text-sm font-medium">PUBLISHED</div>
+                                    <div class="text-5xl font-semibold text-white mt-3">236</div>
+                                </div>
+                                <i class="fa-solid fa-paper-plane text-5xl text-sky-500/30"></i>
+                            </div>
+                            <div class="text-sky-400 text-sm mt-6 flex items-center gap-1">
+                                <i class="fa-solid fa-arrow-trend-up"></i>
+                                <span>94% engagement rate</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Recent Scheduled Posts -->
+                    <div class="mb-6 flex justify-between items-center">
+                        <h2 class="text-xl font-semibold text-white">Upcoming Scheduled Posts</h2>
+                        <a href="#" class="text-violet-400 hover:text-violet-300 text-sm font-medium flex items-center gap-1">
+                            View all <i class="fa-solid fa-arrow-right"></i>
+                        </a>
+                    </div>
+
+                    <div class="bg-zinc-900 border border-zinc-800 rounded-3xl overflow-hidden">
+                        <table class="w-full">
+                            <thead>
+                                <tr class="border-b border-zinc-800">
+                                    <th class="text-left py-6 px-8 font-medium text-zinc-400 text-sm">POST</th>
+                                    <th class="text-left py-6 px-8 font-medium text-zinc-400 text-sm">PLATFORM</th>
+                                    <th class="text-left py-6 px-8 font-medium text-zinc-400 text-sm">SCHEDULED FOR</th>
+                                    <th class="text-left py-6 px-8 font-medium text-zinc-400 text-sm">STATUS</th>
+                                    <th></th>
+                                </tr>
+                            </thead>
+                            <tbody class="divide-y divide-zinc-800">
+                                <tr class="hover:bg-zinc-800/50 transition-colors">
+                                    <td class="py-6 px-8">
+                                        <div class="flex items-center gap-4">
+                                            <div class="w-12 h-12 bg-zinc-800 rounded-2xl flex-shrink-0"></div>
+                                            <div>
+                                                <div class="font-medium">New product launch announcement 🔥</div>
+                                                <div class="text-zinc-500 text-sm">Instagram • Carousel (4 slides)</div>
+                                            </div>
+                                        </div>
+                                    </td>
+                                    <td class="py-6 px-8">
+                                        <i class="fa-brands fa-instagram text-pink-500 text-2xl"></i>
+                                    </td>
+                                    <td class="py-6 px-8 text-sm">
+                                        Tomorrow at 10:00 AM
+                                    </td>
+                                    <td class="py-6 px-8">
+                                        <span class="inline-block px-4 py-1.5 bg-emerald-500/10 text-emerald-400 text-xs font-medium rounded-2xl">Scheduled</span>
+                                    </td>
+                                    <td class="py-6 px-8 text-right">
+                                        <button class="text-zinc-400 hover:text-white"><i class="fa-solid fa-ellipsis-vertical"></i></button>
+                                    </td>
+                                </tr>
+                                <!-- More rows -->
+                                <tr class="hover:bg-zinc-800/50 transition-colors">
+                                    <td class="py-6 px-8">
+                                        <div class="flex items-center gap-4">
+                                            <div class="w-12 h-12 bg-zinc-800 rounded-2xl flex-shrink-0"></div>
+                                            <div>
+                                                <div class="font-medium">Weekly tips for new creators</div>
+                                                <div class="text-zinc-500 text-sm">LinkedIn • Single image</div>
+                                            </div>
+                                        </div>
+                                    </td>
+                                    <td class="py-6 px-8">
+                                        <i class="fa-brands fa-linkedin text-blue-600 text-2xl"></i>
+                                    </td>
+                                    <td class="py-6 px-8 text-sm">
+                                        Apr 12, 2026 • 9:30 AM
+                                    </td>
+                                    <td class="py-6 px-8">
+                                        <span class="inline-block px-4 py-1.5 bg-emerald-500/10 text-emerald-400 text-xs font-medium rounded-2xl">Scheduled</span>
+                                    </td>
+                                    <td class="py-6 px-8 text-right">
+                                        <button class="text-zinc-400 hover:text-white"><i class="fa-solid fa-ellipsis-vertical"></i></button>
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Suppress Tailwind warning
+        window.tailwindConfig = { content: [] };
+
+        function toggleSidebar() {
+            const sidebar = document.getElementById('sidebar');
+            if (sidebar.style.transform === 'translateX(-100%)') {
+                sidebar.style.transform = 'translateX(0)';
+            } else {
+                sidebar.style.transform = 'translateX(-100%)';
+            }
+        }
+
+        function quickCreate() {
+            alert("🎉 Quick Create Post opened!\n\n(You can replace this with a modal in production)");
+        }
+
+        function logout() {
+            if (confirm("Sign out of Schedulix?")) {
+                window.location.href = "index.html"; // Link back to your login page
+            }
+        }
+
+        // Close sidebar when clicking outside on mobile
+        document.addEventListener('click', function(e) {
+            const sidebar = document.getElementById('sidebar');
+            if (window.innerWidth < 1024 && 
+                !sidebar.contains(e.target) && 
+                !e.target.closest('button[onclick="toggleSidebar()"]')) {
+                sidebar.style.transform = 'translateX(-100%)';
+            }
+        });
+
+        // Keyboard shortcut hint
+        console.log('%cSchedulix Dashboard ready ✨\nPress "C" for quick create (demo)', 'color:#a5b4fc; font-weight:600');
+    </script>
+</body>
+</html>
